@@ -1,0 +1,39 @@
+name: PS4 LIVE - Source Checks
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Verificar arquivos
+        run: |
+          set -eu
+          test -s README.md
+          test -s Makefile
+          test -s preview.html
+          test -s src/main.cpp
+          test -s icon0.png
+          echo "PS4 LIVE: arquivos encontrados!"
+
+      - name: Salvar arquivos do projeto
+        uses: actions/upload-artifact@v4
+        with:
+          name: ps4-live-source
+          path: |
+            README.md
+            Makefile
+            preview.html
+            icon0.png
+            src/
+            
